@@ -1,4 +1,4 @@
-# Commands for Linux, AWS, Docker...
+# Useful Commands to Remember
 
 Command to get into AWS instance (ubuntu):\
     `ssh -i <location/to/key.pem> ubuntu@3.146.34.38`
