@@ -1,7 +1,7 @@
 
 services:
   web:
-    image: antho777/alphacrm:latest  # Pulls the image from Docker Hub
+    image: antho777/alphacrm:latest
     container_name: alpha-mm-inc-crm-web
     command: >
       bash -c "python manage.py collectstatic --noinput &&

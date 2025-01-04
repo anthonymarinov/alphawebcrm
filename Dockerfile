@@ -31,7 +31,7 @@ RUN chown -R appuser:appuser /app
 
 # Now run collectstatic as appuser
 USER appuser
-RUN python manage.py collectstatic --noinput
+# RUN python manage.py collectstatic --noinput
 
 # Switch back to root if you need to do more commands as root
 # (optional)
