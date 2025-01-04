@@ -1,0 +1,77 @@
+{% extends 'base-pages/public_base.html' %}
+{% load static %}
+
+{% block content %}
+
+<main class="min-vh-100 d-flex flex-column justify-content-between">
+
+  <div class="bg-cover bg-center position-relative" style="background: url('{% static 'images/tools.jpg' %}') center/cover; height: 100vh;">
+
+      <div class="bg-black opacity-50 position-absolute top-0 start-0 end-0 bottom-0"></div>
+
+      <div class="container h-100 d-flex align-items-center justify-content-center text-white position-relative">
+        <div class="text-start">
+          <h1 class="fw-bold display-4">OUR PROJECTS</h1>
+          <p class="mt-4 fs-5">
+            We have built a reputation for exceptionally high quality work and unbeatable customer service. We use a high-quality fiberglass waterproofing system with durable finishes. No more leaking, 10 years guaranteed.
+          </p>
+          <div class="text-start">
+            <a href="/services/" class="btn btn-outline-light mt-4">WHAT WE OFFER ➜</a>
+          </div>
+        </div>
+      </div>
+  </div>
+  
+
+  <section class="bg-light py-5">
+    <div class="container">
+      <div class="text-center mb-5">
+        <h2 class="fw-bold display-5">Alpha MM Project Portfolio</h2>
+        <p class="text-secondary fs-5 mt-3">
+          Our extensive portfolio covers both commercial and residential construction. 
+          With thousands of completed projects, we have the experience you need.
+        </p>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-md-4">
+          <img src="{% static 'images/walkway2.jpg' %}" alt="Walkway Example" class="img-fluid border border-primary shadow">
+        </div>
+        <div class="col-md-4">
+          <img src="{% static 'images/deck3.jpg' %}" alt="Deck Example" class="img-fluid border border-primary shadow">
+        </div>
+        <div class="col-md-4">
+          <img src="{% static 'images/stairway.jpg' %}" alt="Stairway Example" class="img-fluid border border-primary shadow">
+        </div>
+        <div class="col-md-4">
+          <img src="{% static 'images/deck.jpg' %}" alt="Deck Example" class="img-fluid border border-primary shadow">
+        </div>
+        <div class="col-md-4">
+          <img src="{% static 'images/walkway.jpg' %}" alt="Walkway Example" class="img-fluid border border-primary shadow">
+        </div>
+        <div class="col-md-4">
+          <img src="{% static 'images/landing.jpg' %}" alt="Landing Example" class="img-fluid border border-primary shadow">
+        </div>
+        <div class="col-md-4">
+          <img src="{% static 'images/deck2.jpg' %}" alt="Deck Example" class="img-fluid border border-primary shadow">
+        </div>
+        <div class="col-md-4">
+          <img src="{% static 'images/balcony.jpg' %}" alt="Balcony Example" class="img-fluid border border-primary shadow">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="position-relative bg-dark text-white text-center" style="background: url('{% static 'images/los-angeles.jpg' %}') center/cover; height: 95vh;">
+    <div class="position-absolute top-0 start-0 end-0 bottom-0 bg-black opacity-50"></div>
+    <div class="container d-flex flex-column justify-content-center h-100 position-relative z-1">
+      <h1 class="display-4 fw-bold">Serving Excellence For Over 20 Years.</h1>
+      <div class="text-center">
+        <a href="/about/" class="btn btn-outline-light mt-4">READ ABOUT US ➜</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+{% endblock %}

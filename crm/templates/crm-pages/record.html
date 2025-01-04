@@ -1,0 +1,49 @@
+{% extends 'base-pages/crm_base.html' %}
+
+{% block content %}
+
+<div class="d-flex flex-column min-vh-100">
+    <main class="flex-grow-1">
+        <div class="card">
+            <div class="card-header text-bg-dark">
+                <strong>
+                    {{ client_record.first_name }} 
+                    {{ client_record.last_name }}
+                </strong>
+            </div>
+
+            <div class="card-body">
+                <p class="card-text">
+                    <strong>Email: </strong>{{ client_record.email }}<br/>
+                    <strong>Phone: </strong>{{ client_record.phone }}<br/>
+                    <strong>Address: </strong>
+                        {{ client_record.address }},
+                        {{ client_record.city }},
+                        {{ client_record.state }}
+                        {{ client_record.zipcode }}
+                        <br/>
+                    <strong>Record Created: </strong>{{ client_record.created_at }}<br/>
+                    <strong>ID: </strong>{{ client_record.id }}<br/>
+                </p>
+            </div>
+        </div>
+
+        <br/>
+
+        <div class="d-flex justify-content-between">
+            <a href="{% url 'crm_home' %}" class="btn btn-secondary">
+                Back
+            </a>
+
+            <a href="{% url 'update_record' client_record.id %}" class="btn btn-secondary">
+                Update record
+            </a>
+
+            <a href="{% url 'delete_record' client_record.id %}" class="btn btn-danger">
+                Delete
+            </a>
+        </div>
+    </main>
+</div>
+
+{% endblock %}

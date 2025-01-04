@@ -1,0 +1,52 @@
+{% extends 'base-pages/public_base.html' %}
+{% load static %}
+
+{% block content %}
+
+<main class="min-vh-100 d-flex flex-column justify-content-between">
+
+  <div class="bg-cover bg-center position-relative" style="background: url('{% static 'images/house.jpg' %}') center/cover; height: 100vh;">
+
+    <div class="bg-black opacity-50 position-absolute top-0 start-0 end-0 bottom-0"></div>
+
+    <div class="container h-100 d-flex align-items-center justify-content-center text-white position-relative">
+      <div class="text-start">
+        <h1 class="fw-bold display-4">ABOUT</h1>
+        <h1 class="fw-bold display-4">ALPHA MM INC</h1>
+        <p class="mt-4 fs-5">
+          Founded in 2002, Alpha MM Inc is a leading decking contracting company based in Los Angeles, California, specializing in protecting decks, balconies, patios, stairways, and walkways from water.        </p>
+        <div class="text-start">
+          <a href="/projects/" class="btn btn-outline-light mt-4">VIEW OUR WORK ➜</a>
+        </div>
+      </div>
+    </div>
+  </div>
+       
+
+  <section class="bg-light py-5">
+    <div class="container">
+      <h5 class="text-primary mb-3">WHO WE ARE</h2>
+      <h3 class="fw-bold mb-4">High quality work at competitive prices.</h3>
+      <p class="text-secondary fs-5">
+        Alpha MM Inc is a trusted leader in waterproofing and surface protection services, proudly serving Los Angeles and surrounding areas for over 20 years. We specialize in safeguarding decks, balconies, patios, stairways, and walkways from the elements, ensuring lasting durability and aesthetic appeal.
+      </p>
+      <p class="text-secondary fs-5">
+        With a commitment to excellence, our team combines expert craftsmanship with the highest quality materials to deliver tailored solutions for both residential and commercial properties. From new construction to repairing existing structures, we offer a range of services, including surface repair, waterproof coatings, surface finishes, and resealing, all designed to extend the life of your investment.
+      </p>
+      <p class="text-secondary fs-5">
+        At Alpha MM Inc, customer satisfaction is our top priority. Our dedication to quality, reliability, and competitive pricing has earned us a reputation as one of the top contractors for waterproofing needs in Southern California. Whether you’re looking to protect a new project or repair a leaky surface, we are here to help you every step of the way.
+      </p>
+      <p class="text-secondary fs-5">
+        Choose Alpha MM Inc for your next waterproofing project, and experience the lasting quality and customer service that comes from our highly experienced team.
+      </p>
+      <div class="mt-4">
+        <a href="/contact/" class="btn btn-primary">
+          CONTACT US TODAY ➜
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+{% endblock %}
