@@ -1,34 +1,42 @@
+
 services:
   web:
-    build: .
+    image: antho777/alphacrm:latest  # Pulls the image from Docker Hub
+    container_name: alpha-mm-inc-crm-web
     command: >
       bash -c "python manage.py collectstatic --noinput &&
              gunicorn alphacrm.wsgi:application --bind 0.0.0.0:8000"
     volumes:
-      - .:/app
+      - static_volume:/app/staticfiles
     env_file:
       - .env
+    restart: always
 
   nginx:
     image: nginx:latest
+    container_name: alpha-mm-inc-crm-nginx
     ports:
       - "80:80"
       - "443:443"
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d
-      - ./staticfiles:/app/staticfiles
+      - static_volume:/app/staticfiles
       - /etc/letsencrypt/live/alphamminc.com/:/etc/letsencrypt/live/alphamminc.com/
       - /etc/letsencrypt/archive/alphamminc.com/:/etc/letsencrypt/archive/alphamminc.com/
       - /var/www/certbot:/var/www/certbot
     depends_on:
       - web
+    restart: always
 
   certbot:
     image: certbot/certbot
+    container_name: alpha-mm-inc-crm-certbot
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt
       - /var/www/certbot:/var/www/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    restart: unless-stopped
 
 volumes:
+  static_volume:
   db_data:
