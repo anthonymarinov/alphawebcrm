@@ -1,5 +1,4 @@
 .env
-COMMANDS.md
 virt/
 *.pyc
 __pycache__/
