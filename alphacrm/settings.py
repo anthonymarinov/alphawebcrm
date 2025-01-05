@@ -1,5 +1,9 @@
 from pathlib import Path
 from decouple import config
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Helper functions:
 # Use this code snippet in your app.
@@ -31,7 +35,8 @@ def get_secret(secret_name):
     except Exception as e:
         raise Exception(f"Error fetching secret {secret_name}: {e}")
 
-
+def get_env_variable(var_name, default=None):
+    return os.getenv(var_name, default)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -51,7 +56,7 @@ ALLOWED_HOSTS = ['3.146.34.38',
                  'www.alphamminc.com', 
                  'localhost', 
                  '127.0.0.1', 
-                 "host.docker.internal",]
+                 'host.docker.internal',]
 
 # Application definition
 
@@ -96,19 +101,23 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'alphacrm.wsgi.application'
 
-if not os.getenv("USE_AWS_SECRETS", "false").lower() == "true":
-    # local dev mode
-    EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "fake@example.com")
-    EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "fake-password")
-    DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "fake@example.com")
+
+USE_AWS_SECRETS = get_env_variable("USE_AWS_SECRETS", "false").lower() == "true"
+
+if not USE_AWS_SECRETS:
+    # Local development settings
+    EMAIL_HOST_USER = get_env_variable("EMAIL_HOST_USER", "fake@example.com")
+    EMAIL_HOST_PASSWORD = get_env_variable("EMAIL_HOST_PASSWORD", "fake-password")
+    DEFAULT_FROM_EMAIL = get_env_variable("DEFAULT_FROM_EMAIL", "fake@example.com")
+
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.mysql",
-            "NAME": os.getenv("DB_NAME", "my_local_db"),
-            "USER": os.getenv("DB_USER", "root"),
-            "PASSWORD": os.getenv("DB_PASSWORD", ""),
-            "HOST": os.getenv("DB_HOST", "localhost"),
-            "PORT": os.getenv("DB_PORT", "3306"),
+            "NAME": get_env_variable("DB_NAME", "my_local_db"),
+            "USER": get_env_variable("DB_USER", "django_user"),
+            "PASSWORD": get_env_variable("DB_PASSWORD", "django_password"),
+            "HOST": get_env_variable("DB_HOST", "localhost"),
+            "PORT": get_env_variable("DB_PORT", "3306"),
         }
     }
 else:
@@ -197,14 +206,19 @@ USE_X_FORWARDED_HOST = True
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-# extra security
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-
-SECURE_HSTS_SECONDS = 31536000  # 1 year
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
-
-SECURE_BROWSER_XSS_FILTER = True
-SECURE_CONTENT_TYPE_NOSNIFF = True
+# Security Settings
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+else:
+    # Disable HTTPS enforcement in development
+    SECURE_SSL_REDIRECT = False
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
+    SECURE_HSTS_SECONDS = 0
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = False
+    SECURE_HSTS_PRELOAD = False

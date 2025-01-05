@@ -30,4 +30,7 @@ Remove all unused container images:\
 Remove all unused container volumes:\
     ```docker volume prune -a```
 
-Check storage: ```df -h```
+Check storage: ```df -h```\
+
+For local dev:\
+    ```python manage.py runserver```

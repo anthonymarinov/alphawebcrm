@@ -1,23 +1,37 @@
-version: "3.8"
 
 services:
-  alphawebcrm:
-    build: .
-    image: localalphacrm
-    container_name: alphawebcrm
-
-    # Map host port 8000 to container port 8000
-    ports:
-      - "8000:8000"
-
+  db:
+    image: mysql:8.0
+    container_name: alphawebcrm-db
+    restart: always
     environment:
-      # Local dev overrides
-      USE_AWS_SECRETS: "false"
-      DJANGO_DEBUG: "true"
-      # add any additional env vars you need
+      MYSQL_DATABASE: my_local_db
+      MYSQL_ROOT_PASSWORD: password  # Set the root password
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
 
-    # If your Dockerfile doesn't already define a CMD or ENTRYPOINT
-    # that runs Gunicorn on port 8000, you can specify it here:
-    command: >
-      bash -c "python manage.py collectstatic --noinput &&
-               gunicorn alphacrm.wsgi:application --bind 0.0.0.0:8000"
+  alphawebcrm:
+      build: .
+      image: localalphacrm
+      container_name: alphawebcrm
+      depends_on:
+        - db
+      ports:
+        - "8000:8000"
+      environment:
+        # Local dev overrides
+        USE_AWS_SECRETS: "false"
+        DJANGO_DEBUG: "true"
+        DB_NAME: my_local_db
+        DB_USER: root
+        DB_PASSWORD: password
+        DB_HOST: db
+        DB_PORT: 3306
+      command: >
+        bash -c "python manage.py collectstatic --noinput &&
+                python manage.py runserver 0.0.0.0:8000"
+
+volumes:
+  db_data:
