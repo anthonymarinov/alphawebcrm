@@ -1,7 +1,3 @@
-# FOR LOCAL DEV, SET TO FALSE
-# FOR PRODUCTION, SET TO TRUE
-USE_AWS_SECRETS = True 
-
 
 from pathlib import Path
 from decouple import config
@@ -98,42 +94,24 @@ TEMPLATES = [
 WSGI_APPLICATION = 'alphacrm.wsgi.application'
 
 
-if not USE_AWS_SECRETS:
-    # Local development settings
-    EMAIL_HOST_USER = get_env_variable("EMAIL_HOST_USER", "fake@example.com")
-    EMAIL_HOST_PASSWORD = get_env_variable("EMAIL_HOST_PASSWORD", "fake-password")
-    DEFAULT_FROM_EMAIL = get_env_variable("DEFAULT_FROM_EMAIL", "fake@example.com")
+extra_secrets = get_secret("custom/extra-alpha-db-info")
+rds_secrets = get_secret("rds!db-b9127d9c-9291-40c6-b2f8-e13cd630d333")
 
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.mysql",
-            "NAME": get_env_variable("DB_NAME", "my_local_db"),
-            "USER": get_env_variable("DB_USER", "django_user"),
-            "PASSWORD": get_env_variable("DB_PASSWORD", "django_password"),
-            "HOST": get_env_variable("DB_HOST", "localhost"),
-            "PORT": get_env_variable("DB_PORT", "3306"),
-        }
+EMAIL_HOST_USER = extra_secrets['email_host_user']
+EMAIL_HOST_PASSWORD = extra_secrets['email_host_password']
+DEFAULT_FROM_EMAIL = extra_secrets['default_from_email']
+# Database
+# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": extra_secrets["db_name"],
+        "USER": rds_secrets["username"],
+        "PASSWORD": rds_secrets["password"],
+        "HOST": extra_secrets["db_host"],
+        "PORT": extra_secrets["db_port"],
     }
-else:
-    # production mode: pull from aws
-    extra_secrets = get_secret("custom/extra-alpha-db-info")
-    rds_secrets = get_secret("rds!db-b9127d9c-9291-40c6-b2f8-e13cd630d333")
-
-    EMAIL_HOST_USER = extra_secrets['email_host_user']
-    EMAIL_HOST_PASSWORD = extra_secrets['email_host_password']
-    DEFAULT_FROM_EMAIL = extra_secrets['default_from_email']
-    # Database
-    # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.mysql",
-            "NAME": extra_secrets["db_name"],
-            "USER": rds_secrets["username"],
-            "PASSWORD": rds_secrets["password"],
-            "HOST": extra_secrets["db_host"],
-            "PORT": extra_secrets["db_port"],
-        }
-    }
+}
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'email-smtp.us-east-2.amazonaws.com'
