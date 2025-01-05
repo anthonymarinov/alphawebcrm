@@ -12,11 +12,6 @@ import os
 
 
 def get_secret(secret_name):
-
-    use_aws = os.getenv("USE_AWS_SECRETS", "false").lower() == "true"
-    if not use_aws:
-        # Return some mock secret data so app doesn’t break
-        return {"secret_key": "local-dev-secret"}
     
     """
     Fetch a secret from AWS Secrets Manager.
@@ -98,7 +93,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'alphacrm.wsgi.application'
 
 
-USE_AWS_SECRETS = True
+USE_AWS_SECRETS = False      
 
 if not USE_AWS_SECRETS:
     # Local development settings
