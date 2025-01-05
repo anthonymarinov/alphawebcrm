@@ -1,5 +1,8 @@
 # Useful Commands to Remember
 
+Activate python virtual environment:\
+    `virt/Scripts/activate`
+
 Command to get into AWS instance (ubuntu):\
     `ssh -i <location/to/key.pem> ubuntu@3.146.34.38`
 

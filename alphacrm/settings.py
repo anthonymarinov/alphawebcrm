@@ -40,8 +40,7 @@ SECRET_KEY = get_secret("alphacrm/secret_key")['secret_key']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['3.146.34.38', 'alphamminc.com', 'www.alphamminc.com']
-
+ALLOWED_HOSTS = ['3.146.34.38', 'alphamminc.com', 'www.alphamminc.com', 'localhost', '127.0.0.1']
 
 # Application definition
 
