@@ -12,6 +12,12 @@ import os
 
 
 def get_secret(secret_name):
+
+    use_aws = os.getenv("USE_AWS_SECRETS", "false").lower() == "true"
+    if not use_aws:
+        # Return some mock secret data so app doesn’t break
+        return {"secret_key": "local-dev-secret"}
+    
     """
     Fetch a secret from AWS Secrets Manager.
     """
@@ -40,7 +46,12 @@ SECRET_KEY = get_secret("alphacrm/secret_key")['secret_key']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['3.146.34.38', 'alphamminc.com', 'www.alphamminc.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['3.146.34.38', 
+                 'alphamminc.com', 
+                 'www.alphamminc.com', 
+                 'localhost', 
+                 '127.0.0.1', 
+                 "host.docker.internal",]
 
 # Application definition
 
@@ -85,32 +96,46 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'alphacrm.wsgi.application'
 
-extra_secrets = get_secret("custom/extra-alpha-db-info")
-rds_secrets = get_secret("rds!db-b9127d9c-9291-40c6-b2f8-e13cd630d333")
+if not os.getenv("USE_AWS_SECRETS", "false").lower() == "true":
+    # local dev mode
+    EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "fake@example.com")
+    EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "fake-password")
+    DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "fake@example.com")
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.mysql",
+            "NAME": os.getenv("DB_NAME", "my_local_db"),
+            "USER": os.getenv("DB_USER", "root"),
+            "PASSWORD": os.getenv("DB_PASSWORD", ""),
+            "HOST": os.getenv("DB_HOST", "localhost"),
+            "PORT": os.getenv("DB_PORT", "3306"),
+        }
+    }
+else:
+    # production mode: pull from aws
+    extra_secrets = get_secret("custom/extra-alpha-db-info")
+    rds_secrets = get_secret("rds!db-b9127d9c-9291-40c6-b2f8-e13cd630d333")
+
+    EMAIL_HOST_USER = extra_secrets['email_host_user']
+    EMAIL_HOST_PASSWORD = extra_secrets['email_host_password']
+    DEFAULT_FROM_EMAIL = extra_secrets['default_from_email']
+    # Database
+    # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.mysql",
+            "NAME": extra_secrets["db_name"],
+            "USER": rds_secrets["username"],
+            "PASSWORD": rds_secrets["password"],
+            "HOST": extra_secrets["db_host"],
+            "PORT": extra_secrets["db_port"],
+        }
+    }
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'email-smtp.us-east-2.amazonaws.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = extra_secrets['email_host_user']
-EMAIL_HOST_PASSWORD = extra_secrets['email_host_password']
-DEFAULT_FROM_EMAIL = extra_secrets['default_from_email']
-
-
-
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': extra_secrets['db_name'],
-        'USER': rds_secrets['username'],
-        'PASSWORD': rds_secrets['password'],
-        'HOST': extra_secrets['db_host'],
-        'PORT': extra_secrets['db_port'],
-    }
-}
 
 
 # Password validation

@@ -1,42 +1,23 @@
+version: "3.8"
 
 services:
-  web:
-    image: antho777/alphacrm:latest
-    container_name: alpha-mm-inc-crm-web
+  alphawebcrm:
+    build: .
+    image: localalphacrm
+    container_name: alphawebcrm
+
+    # Map host port 8000 to container port 8000
+    ports:
+      - "8000:8000"
+
+    environment:
+      # Local dev overrides
+      USE_AWS_SECRETS: "false"
+      DJANGO_DEBUG: "true"
+      # add any additional env vars you need
+
+    # If your Dockerfile doesn't already define a CMD or ENTRYPOINT
+    # that runs Gunicorn on port 8000, you can specify it here:
     command: >
       bash -c "python manage.py collectstatic --noinput &&
-             gunicorn alphacrm.wsgi:application --bind 0.0.0.0:8000"
-    volumes:
-      - static_volume:/app/staticfiles
-    env_file:
-      - .env
-    restart: always
-
-  nginx:
-    image: nginx:latest
-    container_name: alpha-mm-inc-crm-nginx
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx/conf.d:/etc/nginx/conf.d
-      - static_volume:/app/staticfiles
-      - /etc/letsencrypt/live/alphamminc.com/:/etc/letsencrypt/live/alphamminc.com/
-      - /etc/letsencrypt/archive/alphamminc.com/:/etc/letsencrypt/archive/alphamminc.com/
-      - /var/www/certbot:/var/www/certbot
-    depends_on:
-      - web
-    restart: always
-
-  certbot:
-    image: certbot/certbot
-    container_name: alpha-mm-inc-crm-certbot
-    volumes:
-      - /etc/letsencrypt:/etc/letsencrypt
-      - /var/www/certbot:/var/www/certbot
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
-    restart: unless-stopped
-
-volumes:
-  static_volume:
-  db_data:
+               gunicorn alphacrm.wsgi:application --bind 0.0.0.0:8000"
