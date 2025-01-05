@@ -1,9 +1,5 @@
 from pathlib import Path
 from decouple import config
-from dotenv import load_dotenv
-
-# Load environment variables from .env file
-load_dotenv()
 
 # Helper functions:
 # Use this code snippet in your app.
