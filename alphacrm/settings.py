@@ -1,16 +1,18 @@
 
 from pathlib import Path
 from decouple import config
+import boto3
+import json
+import os
+
+DEBUG = False
+
 
 # Helper functions:
 # Use this code snippet in your app.
 # If you need more information about configurations
 # or implementing the sample code, visit the AWS docs:
 # https://aws.amazon.com/developer/language/python/
-import boto3
-import json
-import os
-
 
 def get_secret(secret_name):
     
@@ -30,18 +32,14 @@ def get_secret(secret_name):
 def get_env_variable(var_name, default=None):
     return os.getenv(var_name, default)
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = get_secret("alphacrm/secret_key")['secret_key']
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
 ALLOWED_HOSTS = ['3.146.34.38', 
                  'alphamminc.com', 
@@ -49,6 +47,7 @@ ALLOWED_HOSTS = ['3.146.34.38',
                  'localhost', 
                  '127.0.0.1', 
                  'host.docker.internal',]
+
 
 # Application definition
 
@@ -100,6 +99,7 @@ rds_secrets = get_secret("rds!db-b9127d9c-9291-40c6-b2f8-e13cd630d333")
 EMAIL_HOST_USER = extra_secrets['email_host_user']
 EMAIL_HOST_PASSWORD = extra_secrets['email_host_password']
 DEFAULT_FROM_EMAIL = extra_secrets['default_from_email']
+
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 DATABASES = {
@@ -159,8 +159,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Directories containing source static files
-STATICFILES_DIRS = [  # Keep this for your source files
-]
+STATICFILES_DIRS = []
 
 
 # Default primary key field type

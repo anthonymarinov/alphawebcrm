@@ -33,4 +33,5 @@ Remove all unused container volumes:\
 Check storage: ```df -h```\
 
 For local dev:\
-    ```python manage.py runserver```
+    ```python manage.py runserver```/
+    Access in incognito tab @ http://localhost:8000

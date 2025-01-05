@@ -1,6 +1,6 @@
 FROM python:3.10-slim
 
-# Install system deps (already in your Dockerfile, just an example)
+# Install system deps
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         build-essential \
@@ -22,22 +22,21 @@ COPY requirements.txt /app/
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
-# Copy the rest of your code
+# Copy the rest of code
 COPY . /app/
 
 # --- CREATE AND CHOWN THE STATICFILES DIR ---
 RUN mkdir -p /app/staticfiles
 RUN chown -R appuser:appuser /app
 
-# Now run collectstatic as appuser
+# Run collectstatic as appuser
 USER appuser
 # RUN python manage.py collectstatic --noinput
 
-# Switch back to root if you need to do more commands as root
-# (optional)
+# Switch back to root
 USER root
 
-# Then (optionally) chown again if you changed stuff as root 
+# (optionally) chown again if you changed stuff as root 
 # RUN chown -R appuser:appuser /app
 
 # Expose port and set final command
