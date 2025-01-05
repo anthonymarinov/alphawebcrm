@@ -1,3 +1,8 @@
+# FOR LOCAL DEV, SET TO FALSE
+# FOR PRODUCTION, SET TO TRUE
+USE_AWS_SECRETS = True 
+
+
 from pathlib import Path
 from decouple import config
 
@@ -92,8 +97,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'alphacrm.wsgi.application'
 
-
-USE_AWS_SECRETS = False      
 
 if not USE_AWS_SECRETS:
     # Local development settings
