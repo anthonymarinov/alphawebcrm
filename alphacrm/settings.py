@@ -5,7 +5,8 @@ import boto3
 import json
 import os
 
-DEBUG = False
+# Set to true for dev
+DEBUG = True
 
 
 # Helper functions:
