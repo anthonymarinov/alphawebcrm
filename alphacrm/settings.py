@@ -1,3 +1,6 @@
+USE_AWS_SECRETS=True
+
+
 from pathlib import Path
 from decouple import config
 from dotenv import load_dotenv
@@ -101,8 +104,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'alphacrm.wsgi.application'
 
-
-USE_AWS_SECRETS = get_env_variable("USE_AWS_SECRETS", "false").lower() == "true"
 
 if not USE_AWS_SECRETS:
     # Local development settings
