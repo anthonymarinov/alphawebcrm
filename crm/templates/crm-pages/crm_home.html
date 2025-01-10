@@ -19,8 +19,8 @@
                             <th scope="col">Name</th>
                             <th scope="col">Email</th>
                             <th scope="col">Phone</th>
-                            <th scope="col">Address</th>
-                            <th scope="col">Created At</th>
+                            <th scope="col">Projects</th>
+                            <th scope="col">Created</th>
                             <th scope="col">ID</th>
                         </tr>
                     </thead>
@@ -31,8 +31,19 @@
                                     <td>{{ record.first_name }} {{ record.last_name }}</td>
                                     <td>{{ record.email }}</td>
                                     <td>{{ record.phone }}</td>
-                                    <td>{{ record.address }}, {{ record.city }}, {{ record.state }} {{ record.zipcode }}</td>
-                                    <td>{{ record.created_at }}</td>
+                                    <td>
+                                        <ul>
+                                            {% for project in record.projects.all %}
+                                            <li>
+                                                {{ project.address }},
+                                                {{ project.city }}
+                                            </li>
+                                            {% empty %}
+                                                <li>No projects found.</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </td>
+                                    <td>{{ record.created_at|date:"m/d/Y" }}</td>
                                     <td>{{ record.id }}</td>
                                 </tr>
                             {% endfor %}

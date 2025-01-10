@@ -1,11 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from .models import Record
-from .forms import AddRecordForm
+from .models import Record, Project
+from .forms import AddRecordForm, ContactForm, AddProjectForm
 from django.core.mail import send_mail
 from django.conf import settings
-from .forms import ContactForm
 
 def home(request):
     return render(request, 'public-pages/home.html', {})
@@ -28,6 +27,7 @@ def crm_home(request):
                 request, "There was an error logging in, please try again ...")
             return redirect('crm_home')
     else:
+        records = Record.objects.all().prefetch_related('projects')
         return render(request, 'crm-pages/crm_home.html', {'records': records})
 
 def logout_user(request):
@@ -36,10 +36,29 @@ def logout_user(request):
     return redirect('crm_home')
 
 def client_record(request, pk):
+    form = AddProjectForm()
     if request.user.is_authenticated:
-        # lookup record
+        # look up records
         client_record = Record.objects.get(id=pk)
-        return render(request, 'crm-pages/record.html', {'client_record': client_record})
+        projects = client_record.projects.all()
+        
+        if request.method == 'POST':
+            form = AddProjectForm(request.POST)
+            
+            if form.is_valid():
+                project = form.save(commit=False)
+                project.client_record = client_record
+                project.save()
+                messages.success(request, "Project successfully added.")
+                return redirect('record', pk=client_record.id)
+
+        context = {
+            'client_record': client_record,
+            'projects': projects,
+            'form': form,
+        }
+        return render(request, 'crm-pages/record.html', context)
+    
     else:
         messages.success(request, "You must be logged in to view the page.")
         return redirect('crm_home')
