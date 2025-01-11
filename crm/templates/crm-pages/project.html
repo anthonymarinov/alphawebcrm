@@ -1,0 +1,136 @@
+{% extends 'base-pages/crm_base.html' %}
+
+{% block content %}
+
+<div class="d-flex flex-column min-vh-100">
+    <main class="flex-grow-1">
+        <div class="d-flex justify-content-between">
+            <a href="{% url 'record' project.client_record.id %}" class="btn btn-secondary">
+                Back
+            </a>
+
+            <a href="{% url 'update_project' project.id %}" class="btn btn-secondary">
+                Update Project
+            </a>
+
+            <a 
+               class="btn btn-danger"
+               data-bs-toggle="modal"
+               data-bs-target="#deleteProject">
+                Delete Project
+            </a>
+        </div>
+        
+        <br/>
+
+        <div class="card">
+            <div class="card-header text-bg-dark">
+                <strong>
+                    {{ project.address }}, {{ project.city }}, 
+                    {{ project.state}} {{ project.zipcode }}
+                </strong>
+            </div>
+
+            <div class="card-body">
+                <p class="card-text">
+                    <strong>Project Description:</strong>
+                    <br/>
+                    {{ project.description }}
+                    <br/>
+                    <br/>
+
+                    <strong>Estimate:</strong>
+                    {{ project.estimate_date }}
+                    <br/>
+
+                    <strong>Worked:</strong>
+                    {{ project.start_date }} - {{ project.end_date }}
+                    <br/>
+
+                    <strong>ID: </strong>{{ project.id }}
+                    <br/><br/>
+
+                    <strong>Client:</strong>
+                    {{ project.client_record }}
+
+                    <ul>
+                        <li>
+                            <strong>Email:</strong>
+                            {{ project.client_record.email }}
+                            <br/>
+                        </li>
+
+                        <li>
+                            <strong>Phone:</strong>
+                            {{ project.client_record.phone }}
+                        </li>
+
+                        <li>
+                            <strong>Created:</strong>
+                            {{ project.client_record.created_at|date:"m/d/Y" }}
+                        </li>
+                    </ul>
+                </p>
+            </div>
+        </div>
+
+        <br/>
+
+        <div
+            class="modal fade" 
+            id="deleteProject" 
+            tabindex="-1" 
+            aria-labelledby="deleteModalLabel" 
+            aria-hidden="true">
+
+            <div class="modal-dialog">
+                <div class="modal-content text-bg-dark">
+                    <form method="post" id="deleteForm">
+                        {% csrf_token %}
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                            <button 
+                                type="button" 
+                                class="btn-close" 
+                                data-bs-dismiss="modal" 
+                                aria-label="Close">
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to delete the project at:
+                            <ul>
+                                <li>
+                                    <strong>
+                                        {{ project.address }}, {{ project.city }}
+                                    </strong>
+                                </li>
+                            </ul>
+                            for
+                            <strong>
+                                {{ project.client_record }}
+                            </strong>
+                            ?
+                        </div>
+                        <div class="modal-footer">
+                            <button 
+                                type="button" 
+                                class="btn btn-secondary" 
+                                data-bs-dismiss="modal">
+                                Cancel
+                            </button>
+
+                            <a 
+                                href="{% url 'delete_project' project.id %}" 
+                                class="btn btn-danger">
+                                    Delete
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+        </div>
+    </main>
+</div>
+
+{% endblock %}

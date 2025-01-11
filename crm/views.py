@@ -63,6 +63,25 @@ def client_record(request, pk):
         messages.success(request, "You must be logged in to view the page.")
         return redirect('crm_home')
     
+def project(request, pk):
+    if request.user.is_authenticated:
+        project = Project.objects.get(id=pk)
+        return render(request, 'crm-pages/project.html', {'project': project})
+    else:
+        messages.success(request, "You must be logged in to view a project.")
+        return redirect('crm-home')
+        
+    
+def delete_project(request, pk):
+    if request.user.is_authenticated:
+        project = Project.objects.get(id=pk)
+        project.delete()
+        messages.success(request, "Project successfully deleted.")
+        return redirect('record', pk=project.client_record.id)
+    else:
+        messages.sucess(request, "You must be logged in to delete a project")
+        return redirect('crm_home')
+    
 def delete_record(request, pk):
     if request.user.is_authenticated:
         delete_it = Record.objects.get(id=pk)
@@ -99,6 +118,32 @@ def update_record(request, pk):
         messages.success(request, "You must be logged in.")
         return redirect('crm_home')
     
+def update_project(request, pk):
+    if request.user.is_authenticated:
+        project = Project.objects.get(id=pk)
+
+        if request.method == 'POST':
+            form = AddProjectForm(request.POST or None, instance=project)
+        
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Project successfully updated.")
+                return redirect('project', pk=project.id)
+            
+        else:
+            form = AddProjectForm(instance=project)
+
+        context = {
+            'form': form,
+            'project': project,
+        }
+        return render(request, 'crm-pages/update_project.html', context)
+    
+    else:
+        messages.success(request, "You must be logged in.")
+        return redirect('crm_home')
+        
+
 def about(request):
     return render(request, 'public-pages/about.html', {})
 

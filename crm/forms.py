@@ -116,7 +116,6 @@ class AddProjectForm(forms.ModelForm):
         label=""
     )
 
-
     class Meta:
         model = Project
         exclude = ('user', 'client_record')

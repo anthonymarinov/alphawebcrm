@@ -15,4 +15,7 @@ urlpatterns = [
     path('add_record/', views.add_record, name='add_record'),
     path('update_record/<int:pk>', views.update_record, name='update_record'),
     path('captcha/', include('captcha.urls')),
+    path('project/<int:pk>/delete/', views.delete_project, name='delete_project'),
+    path('project/<int:pk>/', views.project, name='project'),
+    path('update_project/<int:pk>/', views.update_project, name='update_project'),
 ]

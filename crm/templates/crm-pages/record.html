@@ -4,6 +4,25 @@
 
 <div class="d-flex flex-column min-vh-100">
     <main class="flex-grow-1">
+        <div class="d-flex justify-content-between">
+            <a href="{% url 'crm_home' %}" class="btn btn-secondary">
+                Back
+            </a>
+
+            <a href="{% url 'update_record' client_record.id %}" class="btn btn-secondary">
+                Update Client
+            </a>
+
+            <a 
+               class="btn btn-danger"
+               data-bs-toggle="modal"
+               data-bs-target="#deleteClient">
+                Delete Client
+            </a>
+        </div>
+
+        <br/>
+        
         <div class="card">
             <div class="card-header text-bg-dark">
                 <strong>
@@ -20,16 +39,19 @@
                         <ul>
                         {% for project in projects %}
                             <li>
-                                <strong>
-                                    {{ project.address }},
-                                    {{ project.city }},
-                                    {{ project.state }}
-                                    {{ project.zipcode }}
-                                </strong>
+                                <a href="{% url 'project' project.id %}">
+                                    <strong>
+                                        {{ project.address }},
+                                        {{ project.city }},
+                                        {{ project.state }}
+                                        {{ project.zipcode }}
+                                    </strong>
+                                </a>
+                                
                                 <br/>
-                                Estimate: {{ project.estimate_date }}
+                                <strong>Estimate: </strong>{{ project.estimate_date }}
                                 <br/>
-                                Worked: {{ project.start_date }} - {{ project.end_date }}
+                                <strong>Worked: </strong>{{ project.start_date }} - {{ project.end_date }}
                             </li>
                         {% empty %}
                             <li>No projects found for this client.</li>
@@ -52,32 +74,16 @@
                         Add Project
                     </button>
                 </form>
+                <br/>
             </div>
 
         </div>
 
         <br/>
 
-        <div class="d-flex justify-content-between">
-            <a href="{% url 'crm_home' %}" class="btn btn-secondary">
-                Back
-            </a>
-
-            <a href="{% url 'update_record' client_record.id %}" class="btn btn-secondary">
-                Update Client Record
-            </a>
-
-            <a 
-               class="btn btn-danger"
-               data-bs-toggle="modal"
-               data-bs-target="#deleteModal">
-                Delete Client
-            </a>
-        </div>
-
         <div
             class="modal fade" 
-            id="deleteModal" 
+            id="deleteClient" 
             tabindex="-1" 
             aria-labelledby="deleteModalLabel" 
             aria-hidden="true">
@@ -97,10 +103,14 @@
                         </div>
                         <div class="modal-body">
                             Are you sure you want to delete the record for: 
-                            <strong>
-                                {{ client_record.first_name }} 
-                                {{ client_record.last_name }}
-                            </strong>?
+                            <ul>
+                                <li>
+                                    <strong>
+                                        {{ client_record.first_name }} 
+                                        {{ client_record.last_name }}
+                                    </strong>?
+                                </li>
+                            </ul>
                         </div>
                         <div class="modal-footer">
                             <button 
@@ -113,7 +123,7 @@
                                 href="{% url 'delete_record' client_record.id %}" 
                                 class="btn btn-danger">
                                     Delete
-                                </a>
+                            </a>
                         </div>
                     </form>
                 </div>

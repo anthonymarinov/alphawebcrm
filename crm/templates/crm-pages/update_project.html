@@ -5,7 +5,7 @@
 <div class="d-flex flex-column min-vh-100">
     <main class="flex-grow-1">
         <div class="col-md-6 offset-md-3">
-            <h1>Update Client Info</h1>
+            <h1>Update Project Info</h1>
             <br/>
 
             <form method="POST">
@@ -17,11 +17,11 @@
 
                 <div class="d-flex justify-content-between">
                     <button type="submit" class="btn btn-primary">
-                        Update Client
+                        Update Project
                     </button>
 
-                    <a href="{% url 'crm_home' %}" class="btn btn-secondary">
-                        CRM Home
+                    <a href="{% url 'project' project.id %}" class="btn btn-secondary">
+                        Back
                     </a>
                 </div>
             </form>
