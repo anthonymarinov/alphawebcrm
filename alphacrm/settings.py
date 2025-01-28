@@ -6,7 +6,7 @@ import json
 import os
 
 # Set to true for dev
-DEBUG = True
+DEBUG = False
 
 
 # Helper functions:
